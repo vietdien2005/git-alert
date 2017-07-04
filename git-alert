@@ -1,0 +1,60 @@
+#!/bin/bash
+
+function alert {
+	# export variable display notification from cron
+	export DISPLAY=":0.0"
+
+	cd $FOLDER_GIT
+
+	# check folder have folder .git
+	if ! git rev-parse --git-dir > /dev/null 2>&1 ; then
+		echo ""
+		echo "Error: folder not a git repository"
+		echo ""
+		exit
+	fi
+
+	# check repository we want to watch (default to origin/master)
+	if [ -z "$REPOSITORY" ]; then
+		repo="origin/master"
+	else
+		repo="$REPOSITORY"
+	fi
+	
+	latest_revision="none"
+
+    # get the latest revision
+    current_revision=`git rev-parse $repo`
+
+    if [ $latest_revision != $current_revision ]; then
+
+        latest_revision=$current_revision
+
+        commit_name=`git log -1 --format=%cn $latest_revision`
+        commit_when=`git log -1 --format=%cr $latest_revision`
+        commit_summary=`git log -1 --format=%s $latest_revision`
+        commit_body=`git log -1 --format=%b $latest_revision`
+
+        # create messages
+        summary="$commit_name push to $repo $commit_when!"
+        body="$commit_summary\n\n$commit_body"
+
+        # notify the new commit
+		`/usr/bin/notify-send "$summary" "$body"` 
+    fi
+}
+
+FOLDER_GIT=$1
+REPOSITORY=$2
+
+if [ -d "$FOLDER_GIT" ]; then
+	(alert $FOLDER_GIT $REPOSITORY)
+else
+	echo ""
+	echo "Error: Wrong folder git !!!"
+	echo ""
+	echo "Usage: bash git-alert <git_folder> <remote>/<branch> "
+	echo ""
+	echo "Example: bash git-alert /home/your_repo origin/master "
+	echo ""
+fi
