@@ -9,12 +9,16 @@ Installation:
 ------------
 Run command: 
 
-	git clone https://github.com/vietdien2005/git-alert.git && cd git-alert 
-	chmod +x git-alert && sudo mv git-alert /usr/bin
+	git clone https://github.com/vietdien2005/git-alert.git
+	cd git-alert && chmod +x git-alert && sudo mv git-alert /usr/bin
 
-And create your crontab:
+And create your cron:
 
-	crontab -l | { cat; echo "5 * * * * git-alert /home/your_repo origin/master >/dev/null 2>&1"; } | crontab -
+	crontab -l | { cat; echo "* * * * * git-alert /home/repo origin/master >/dev/null 2>&1"; } | crontab -
+
+Or run command ` crontab -e ` and input this line:
+
+	* * * * * git-alert /home/repo origin/master >/dev/null 2>&1
 
 Usage:
 ----------
@@ -25,10 +29,4 @@ Example:
 ----------
 
     git-alert /home/your_repo origin/master
-
-Create a crontab like:
-	
-	crontab -l | { cat; echo "1 * * * * git-alert /home/your_repo origin/master >/dev/null 2>&1"; } | crontab -
-
-
 

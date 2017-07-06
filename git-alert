@@ -20,28 +20,28 @@ function alert {
 	else
 		repo="$REPOSITORY"
 	fi
-	
+		
 	latest_revision="none"
 
-    # get the latest revision
-    current_revision=`git rev-parse $repo`
+	# get the latest revision
+	current_revision=`git rev-parse $repo`
 
-    if [ $latest_revision != $current_revision ]; then
+	if [ $latest_revision != $current_revision ]; then
 
-        latest_revision=$current_revision
+		latest_revision=$current_revision
 
-        commit_name=`git log -1 --format=%cn $latest_revision`
-        commit_when=`git log -1 --format=%cr $latest_revision`
-        commit_summary=`git log -1 --format=%s $latest_revision`
-        commit_body=`git log -1 --format=%b $latest_revision`
+		commit_name=`git log -1 --format=%cn $latest_revision`
+		commit_when=`git log -1 --format=%cr $latest_revision`
+		commit_summary=`git log -1 --format=%s $latest_revision`
+		commit_body=`git log -1 --format=%b $latest_revision`
 
-        # create messages
-        summary="$commit_name push to $repo $commit_when!"
-        body="$commit_summary\n\n$commit_body"
+		# create messages
+		summary="$commit_name push to $repo $commit_when!"
+		body="$commit_summary\n\n$commit_body"
 
-        # notify the new commit
+		# notify the new commit with messages
 		`/usr/bin/notify-send "$summary" "$body"` 
-    fi
+	fi
 }
 
 FOLDER_GIT=$1
