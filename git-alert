@@ -20,6 +20,11 @@ function alert {
 	else
 		repo="$REPOSITORY"
 	fi
+
+	REMOTE=$(dirname "${REPOSITORY}")
+	BRANCH=$(basename "${REPOSITORY}")
+
+	git fetch "$REMOTE"
 		
 	latest_revision="none"
 
